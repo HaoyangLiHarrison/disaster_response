@@ -20,6 +20,11 @@ pd.set_option('mode.chained_assignment', None)
 nltk.download('punkt')
 
 def load_data(database_filepath):
+    """
+    Loading the pre-processed DataFrame from the db path.
+    Specifying the training data namely X and y as well as 
+    the categorys of labels for model evaluation. 
+    """
     engine = create_engine(f'sqlite:///{database_filepath}')
     df = pd.read_sql_table(table_name='msg',con=engine)
     X = df.message
@@ -30,11 +35,18 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    '''
+    Tokenlizing the inpute Series of text as words.
+    '''
     words = word_tokenize(text)
     return words
 
 
 def build_model():
+    '''
+    Constructing the ML pipline for trianing and 
+    classification.
+    '''
     improved_pipeline = Pipeline([
         ('vect', TfidfVectorizer(tokenizer=tokenize,stop_words='english')),
         (
@@ -51,15 +63,20 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    '''
+    Evaluating the model performance. 
+    '''
     Y_pred_improved = model.predict(X_test)
     print(classification_report(Y_pred_improved,Y_test,target_names=category_names))
 
 
 def save_model(model, model_filepath):
+    """Saving the pipeline as pickle file"""
     joblib.dump(model, model_filepath)
 
 
 def main():
+    """Loading the data, running the model and saving the model"""
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
