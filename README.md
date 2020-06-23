@@ -30,7 +30,7 @@ The Project is divided in the following Sections:
 ### Installing
 Clone this GIT repository:
 ```
-git clone https://github.com/HaoyangLiHarrison/disaster-response.git
+git clone https://github.com/HaoyangLiHarrison/disaster_response.git
 ```
 
 ### Files
