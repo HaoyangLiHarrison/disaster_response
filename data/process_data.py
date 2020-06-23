@@ -6,6 +6,16 @@ from collections import Counter
 
 
 def load_data(messages_filepath, categories_filepath):
+    """
+    Loading dataframe from filepaths
+    
+    INPUT
+    messages_filepath -- str, link to file
+    categories_filepath -- str, link to file
+    
+    OUTPUT
+    df - pandas DataFrame
+    """
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories,on='id',how='inner')
@@ -15,7 +25,15 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    """
+    Pre-processing the Datafram for modelling
     
+    INPUT
+    df -- type pandas DataFrame
+    
+    OUTPUT
+    df -- cleaned pandas DataFrame
+    """
     categories = df.categories.str.split(pat=';', n=-1, expand=True)
     row = categories.iloc[0]
     category_colnames = row.apply(lambda x:x[:-2])
@@ -33,6 +51,7 @@ def clean_data(df):
     return df
 
 def save_data(df, database_filename):
+    """Saving the DataFrame (df) to a database path"""
     engine = create_engine(f'sqlite:///{database_filename}')
     df.to_sql( 
         'msg',
@@ -43,6 +62,7 @@ def save_data(df, database_filename):
 
 
 def main():
+    """Running main functions"""
     if len(sys.argv) == 4:
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
